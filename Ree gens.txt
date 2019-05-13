@@ -1,0 +1,112 @@
+#Throughout, [B] refers to Bäärnhielm, Recognising the small Ree groups in their natural representations, J. Algebra 416 (2014), 139--166.
+
+alpha:=function(x,q)
+	#Input:		An element x of GF(q), and q=3^(2*m+1)
+	#Output:	The generator alpha(x) described in (3.1) of [B]
+
+	local t,M;
+
+	t:=Sqrt(q/3);
+
+	M:=IdentityMat(7,GF(q));
+
+	M[1][2]:= x^t;
+	M[1][5]:= -x^(3*t+1);
+	M[1][6]:= -x^(3*t+2);
+	M[1][7]:= x^(4*t+2);
+	M[2][3]:= x;
+	M[2][4]:= x^(t+1);
+	M[2][5]:= -x^(2*t+1);
+	M[2][7]:= -x^(3*t+2);
+	M[3][4]:= x^t;
+	M[3][5]:= -x^(2*t);
+	M[3][7]:= x^(3*t+1);
+	M[4][5]:= x^t;
+	M[5][6]:= -x;
+	M[5][7]:= x^(t+1);
+	M[6][7]:= -x^t;
+
+	return M;
+end;;
+
+
+beta:=function(x,q)
+	#Input:		An element x of GF(q), and q=3^(2*m+1)
+	#Output:	The generator beta(x) described in (3.2) of [B]
+
+	local t,M;
+
+	t:=Sqrt(q/3);
+
+	M:=IdentityMat(7,GF(q));
+
+	M[1][3]:= -x^t;
+	M[1][5]:= -x;
+	M[1][7]:= -x^(t+1);
+	M[2][4]:= x^t;
+	M[2][6]:= -x^(2*t);
+	M[3][7]:= x;
+	M[4][6]:= x^t;
+	M[5][7]:= x^t;
+
+	return M;
+end;;
+
+
+gamma:=function(x,q)
+	#Input:		An element x of GF(q), and q=3^(2*m+1)
+	#Output:	The generator gamma(x) described in (3.3) of [B]
+
+	local t,M;
+
+	t:=Sqrt(q/3);
+
+	M:=IdentityMat(7,GF(q));
+
+	M[1][4]:= -x^t;
+	M[1][6]:= -x;
+	M[1][7]:= -x^(2*t);
+	M[2][5]:= -x^t;
+	M[2][7]:= x;
+	M[3][6]:= x^t;
+	M[4][7]:= -x^t;
+
+	return M;
+end;;
+
+
+S:=function(a,b,c,q)
+	#Input:		Elements a,b,c of GF(q), and q=3^(2*m+1)
+	#Output:	S(a,b,c) = alpha(a)*beta(b)*gamma(c), as in (3.9) of [B]
+
+	return alpha(a,q)*beta(b,q)*gamma(c,q);
+end;;
+
+
+h:=function(x,q)
+	#Input:		A nonzero element x of GF(q), and q=3^(2*m+1)
+	#Output:	The generator h(x) of (3.4) in [B]
+
+	local t;
+
+	t:=Sqrt(q/3);
+
+	return DiagonalMat( [x^t, x^(1-t), x^(2*t-1), x^0, x^(1-2*t), x^(t-1), x^(-t)] );
+end;;
+
+
+x:=function(q)
+	#Input:		A prime power q = 3^(2*m_1)
+	#Output:	The 7x7 matrix over with -1 all along the anti-diagonal,
+	#		and zeros everywhere else
+
+	local M,i;
+
+	M:=NullMat(7,7,GF(q));
+
+	for i in [1..7] do
+		M[i][8-i]:=-Z(q)^0;
+	od;
+
+	return M;
+end;;
